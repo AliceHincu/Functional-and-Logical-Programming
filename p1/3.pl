@@ -40,7 +40,7 @@ repetitiveElem([H|T], R):-
     nrOcc(T, H, NrOccHead),
     NrOccHead > 0,
     removeElement([H|T], H, NewList),
-	repetitiveElem(NewList, R).
+    repetitiveElem(NewList, R).
 repetitiveElem([H|T],[H|R]):-
     nrOcc(T, H, NrOccHead),
     NrOccHead =:= 0,
