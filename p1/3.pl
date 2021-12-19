@@ -5,8 +5,8 @@
 
 % a.
 % nrOcc(l1l2...ln, e) = { 0, if n = 0
-%					    { 1 + nrOcc(l2...ln, e), if l1 = e
-%					    { nrOcc(l2...ln, e), otherwise
+%			{ 1 + nrOcc(l2...ln, e), if l1 = e
+%			{ nrOcc(l2...ln, e), otherwise
 %
 nrOcc([], _, 0).
 nrOcc([H|T], E, R):-
@@ -17,9 +17,9 @@ nrOcc([H|T], E, R):-
     H =\= E,
     nrOcc(T, E, R).
 
-% removeElement(l1l2...ln, e) = {[], if n = 0
-% 								{ l1 U removeElement(l2...ln, e), if l1 != e
-%								{ removeElement(l2...ln, e), otherwise
+% removeElement(l1l2...ln, e) = { [], if n = 0
+% 				{ l1 U removeElement(l2...ln, e), if l1 != e
+%				{ removeElement(l2...ln, e), otherwise
 %
 removeElement([], _, []).
 removeElement([H|T], E, [H|R]):-
@@ -30,9 +30,9 @@ removeElement([H|T], E, R):-
     removeElement(T, E, R).
 
 % repetitiveElem(l1l2...ln) = 
-%   {[], if n = 0
-%	{repetitiveElem(removeElement(l1l2...ln, l1)) , if nrOcc(l2..ln, l1) > 0
-%   {l1 U repetitiveElem(l2...ln), otherwise}
+%       { [], if n = 0
+%	{ repetitiveElem(removeElement(l1l2...ln, l1)) , if nrOcc(l2..ln, l1) > 0
+%   	{ l1 U repetitiveElem(l2...ln), otherwise}
 %
 
 repetitiveElem([], []).
@@ -49,7 +49,7 @@ repetitiveElem([H|T],[H|R]):-
 % b. Remove all occurrences of a maximum value from a list on integer numbers.
 
 % maximum(a, b) = { a, a>b
-%				  { b, b>=a
+%		  { b, b>=a
 %					   
 maximum(A, B, A):-
     A > B.
@@ -57,7 +57,7 @@ maximum(A, B, B):-
     B >= A.
 
 % maximumList(l1l2...ln) = { l1, if n=1
-% 						   { maximum(maximumList(l2...ln), l1), otherwise
+% 			   { maximum(maximumList(l2...ln), l1), otherwise
 
 maximumList([E], E).
 maximumList([H|T], Max):-
