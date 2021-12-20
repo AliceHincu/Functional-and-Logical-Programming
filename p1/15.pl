@@ -31,3 +31,4 @@ decomposeList([H|T], EvenList, [H|OddList], EvenNumbers, NewOddNumbers):-
 decomposeListMain(L, [[EvenList|[OddList]], [EvenNumbers|OddNumbers]]):-
     decomposeList(L, EvenList, OddList, EvenNumbers, OddNumbers).
     
+% decomposeListMain([1,4,7,2,80,9,3,78,5], R)
