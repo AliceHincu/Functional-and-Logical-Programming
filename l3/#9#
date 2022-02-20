@@ -1,0 +1,26 @@
+; 9. Write a function that removes all occurrences of an atom from any level of a list.
+; Mathematical model
+; sterg(l, elem) = 
+;   { [], if l = elem
+;   { l, if l != elem
+;   { sterg(l_i) , otherwise, where l = (l_1,l_2..l_n) is list
+
+(defun sterg(L e)
+    (cond
+        ((and (atom L) (equal L e)) nil)
+        ((atom L) (list L))
+        (t (list (apply #'append (mapcar #'(lambda (L) (sterg L e)) L )))) 
+    )
+)
+
+; Mathematical model
+; stergere(l, elem) = l1 , where l1l2..ln = sterg(l, elem)
+(defun stergere (L e)
+    (car (sterg L e))
+)
+
+; stergere '(A 2 C (B -4 (C -6)) -1 C) 'C  -> (A 2 (B -4 (-6)) -1)
+; stergere '(A 2 C (B -4 (C -6)) -1 C) 'D  -> (A 2 C (B -4 (C -6)) -1 C)
+; stergere '(A 2 C (B -4 (C -6)) -1 C) '(C -6) -> not an atom, nothing changes
+
+

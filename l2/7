@@ -1,0 +1,91 @@
+;7. Return the level of a node X in a tree of type (1). The level of the root element is 0.
+
+;  A
+; / \
+;B   C
+;   / \
+;  D   E
+;
+;is represented as follows:
+;(A 2 B 0 C 2 D 0 E 0)
+
+; nv = nr vertices, nm = nr muchii
+; Mathematical model
+; parcurg_st(l1l2..ln, nv, nm) = 
+;   { [], if n = 0
+;   { [], if nv = nm + 1 
+;   { l1 U l2 U parcurg_st(l3...ln, nv+1, nm+l2)
+(defun parcurg_st(arb nv nm)
+    (cond
+        ((null arb) nil)
+        ((= nv (+ 1 nm)) nil)
+        (t (cons (car arb)
+             (cons (cadr arb)
+                 (parcurg_st (cddr arb) (+ 1 nv) (+ (cadr arb) nm))
+             )
+           )
+        )
+    )
+)
+
+
+; Mathematical model
+; leftTree(l1l2...ln) =
+;   { parcurg_st(l2,0,0)
+(defun leftTree (arb)
+    (parcurg_st (cddr arb) 0 0)
+)
+
+
+; nv = nr vertices, nm = nr muchii
+; Mathematical model
+; parcurg_dr(l1l2..ln, nv, nm) = 
+;   { [], if n = 0
+;   { l1l2...ln, if nv = nm + 1 
+;   { parcurg_dr(l3...ln, nv+1, nm+l2)
+(defun parcurg_dr (l nv nm)
+    (cond
+        ((null l) nil)
+        (( = nv (+ nm 1))l)
+        (t (parcurg_dr (cddr l) (+ nv 1) (+ nm (cadr l))))
+    )
+)
+
+; Mathematical model
+; rightTree(l1l2...ln) =
+;   { parcurg_dr(l2,0,0)
+
+(defun rightTree (arb)
+    (parcurg_dr (cddr arb) 0 0)
+)
+
+
+; Mathematical model
+; node_level_aux(l1l2..ln, elem, lvl) = 
+;   { -1 , if elem does not exist
+;   { lvl, if elem = l1
+;   { X, if X!=-1, where X = node_level_aux(leftTree(l1l2...ln), elem, lvl+1) 
+;   { node_level_aux(rightTree(l1l2...ln), elem, lvl+1)
+
+(defun node_level_aux (l e lvl)
+    (cond
+        ((null l) -1)
+        ((equal e (car l)) lvl)
+        ((/= (set 'X (node_level_aux (leftTree l) e (+ 1 lvl))) -1) (eval 'X))
+        (t (node_level_aux (rightTree l) e (+ 1 lvl)))
+    )
+)
+
+
+;Mathematical model:
+;   node_level(l1..ln, e) = node_level_aux(l1..ln, e, 0)
+;
+
+(defun node_level (l e)
+    (node_level_aux l e 0)
+)
+
+;(node_level '(A 2 B 0 C 2 D 0 E 0) 'A) -> 0
+;(node_level '(A 2 B 0 C 2 D 0 E 0) 'B) -> 1
+;(node_level '(A 2 B 0 C 2 D 0 E 0) 'D) -> 2
+;(node_level '(A 2 B 0 C 2 D 0 E 0) 'F) -> -1

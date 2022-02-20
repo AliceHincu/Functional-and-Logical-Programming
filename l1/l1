@@ -1,0 +1,108 @@
+; append_(l1l2...ln, p1p2...pm) = {p1p2...pm, if n = 0
+;                                 {l1 U append_(l2...ln, p1...pm), otherwise
+
+(defun append_ (l p)
+       (cond
+               ((null l) p)
+               (T (cons (car l) (append (cdr l) p)))
+       )
+)
+
+; length_(l1l2...ln) = {0, if n=0
+;                     {1+length_(l2...ln), otherwise
+(defun length_ (l)
+      (cond
+             ((null l) 0)
+             (T (+ 1 (length_ (cdr l))))
+      )
+
+)
+
+;8.a)Write a function to return the difference of two sets.
+;b)Write a function to reverse a list with its all sublists, on all levels.
+;c)Write a function to return the list of the first elements of all list elements of a given list with an odd number of elements at superficial level. Example:(1 2 (3 (4 5) (6 7)) 8 (9 10 11)) => (1 3 9).
+;d)Write a function to return the sum of all numerical atoms in a list at superficial level.
+
+;a)Write a function to return the difference of two sets.   Practic a-b
+; model matematic
+; difference(l1...ln, p1...pm) = { [] , n = 0
+;                                { l1 U difference(l2...ln, p1...pm), l1 nu apartine p1...pm
+;                                { difference(l2...ln,p1...pm), otherwise
+;
+;
+(defun difference (a b)
+	(cond
+		((null a) nil)
+		((not (member (car a) b)) (cons (car a) (difference (cdr a) b)))
+		(T (difference (cdr a) b))
+	)
+)
+
+;(difference '(1 2 3 4 5) '(1 2))
+; => '(3 4 5)
+;(difference '(1) '(1 2))
+; => NIL
+
+;b) Write a function to reverse a list with its all sublists, on all levels.
+; Model matematic
+; _reverse(l1...ln) = { [], n = 0
+;                     { _reverse(l2...ln) U _reverse(l1), if l1 is list
+;                     { reverse(l2...ln) U l1, otherwise
+(defun _reverse (l)
+	(cond
+		((null l) nil)
+		((listp (car l)) (append (_reverse (cdr l)) (list (_reverse (car l)))))
+		(T (append_ (_reverse (cdr l)) (list (car l))))
+	)
+)
+
+;(_reverse '(1 2 (1 2 3) 3 4))
+; => '(4 3 (3 2 1) 2 1)
+
+;c)Write a function to return the list of the first elements of all list elements of a given list with an odd number of elements at superficial level. Example:(1 2 (3 (4 5) (6 7)) 8 (9 10 11)) => (1 3 9)
+
+;Model matematic
+; length(l1...ln) = { 
+;                     1 + length(l2...ln)
+; odd-list-length(l1...ln) = {true , if n%2=1
+;                            {false, otherwise
+;
+(defun odd-list-length (l)
+	(= (mod (length_ l) 2) 1)
+)
+
+;(odd-list-length '(1 2 3))
+; => T
+
+; Model matematic
+; first-elements(l1...ln, contor) = { [], n = 0
+;                                   { first-elements(l1, True) U first-elements(l2...ln, False), if l1 is list
+;                                   { l1 U first-element(l2...ln, False), if contor & odd-list-length(l1...ln)
+;                                   { first-elements(l2...ln, False), otherwise
+;
+(defun first-elements (l first-element)
+	(cond
+		((null l) nil)
+		((listp (car l)) (append_ (first-elements (car l) T) (first-elements (cdr l) nil)))
+		((and first-element (odd-list-length l)) (cons (car l) (first-elements (cdr l) nil)))
+		(T (first-elements (cdr l) nil))
+	)
+)
+;(first-elements '(1 2 (3 (4 5) (6 7)) 8 (9 10 11)) T)
+; => '(1 3 9)
+
+;d)Write a function to return the sum of all numerical atoms in a list at superficial level
+; Model matematic
+; list-sum(l1...ln) = { [], n = 0
+;                     { l1+list-sum(l2...ln), if l1 is a number
+;                     { list-sum(l2...ln), otherwise
+(defun list-sum (l)
+	(cond
+		((null l) 0)
+		((numberp (car l)) (+ (car l) (list-sum (cdr l))))
+		(T (list-sum (cdr l)))
+	)
+)
+
+; (list-sum '(1 (1 2) 2 (1 2) 3 () a))
+; => 6
